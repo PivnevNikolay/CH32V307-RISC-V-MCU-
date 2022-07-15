@@ -1,3 +1,6 @@
+#include "stdbool.h"
+#include "stdio.h"
+#include <math.h>
 #include "debug.h"
 #define ADDR_FIXED 0x44
 #define ADDR_AUTO  0x40
@@ -13,6 +16,7 @@ uint8_t PointData;
 uint8_t Cmd_DispCtrl;
 uint8_t Cmd_SetData;
 uint8_t Cmd_SetAddr;
+int q ;
 //*************************************************************************************************************
 void clear(void);
 void display(uint8_t BitAddr, uint8_t DispData);
@@ -26,6 +30,7 @@ void display_Byte(uint8_t bit0, uint8_t bit1, uint8_t bit2, uint8_t bit3);
 void start(void);
 void stop(void);
 void Running_String(uint8_t DispData[], uint8_t amount, int delayMs);
+void display_number_output_Int(int value);
 //*************************************************************************************************************
 void GPIO_Pin_INIT_TM1637(void);
 //*************************************************************************************************************
@@ -37,11 +42,19 @@ int main(void)
   GPIO_Pin_INIT_TM1637();
   printf("SystemClk:%d\r\n",SystemCoreClock);
   clear();
-  brightness_(7, 0x40, 0xc0); //brightness,0 - 7(min - max)
+  brightness_(7, 0x40, 0xc0); // brightness, 0 - 7 (min - max)
+  Running_String(Hello_world, sizeof(Hello_world), 300);
   while(1)
   {
-    Running_String(Hello_world, sizeof(Hello_world), 300);
-  }
+   for ( q =-20;q<21;q++){
+    display_number_output_Int(q);
+    Delay_Ms(200);
+   }
+   for ( q =20;q>-21;q--){
+    display_number_output_Int(q);
+    Delay_Ms(200);
+   }
+ }
 }
 void GPIO_Pin_INIT_TM1637(void)
 {
@@ -193,7 +206,47 @@ void Running_String(uint8_t DispData[], uint8_t amount, int delayMs) {
   }
   for (uint8_t i = 0; i <= amount + 4; i++) {
   display_Byte(segm_data[i], segm_data[i + 1], segm_data[i + 2], segm_data[i + 3]);
+  //display_Byte(segm_data[i+3], segm_data[i + 2], segm_data[i + 1], segm_data[i]);
   Delay_Ms(delayMs);
   }
 }
 //*************************************************************************************************************
+void display_number_output_Int(int value) {
+  if (value > 9999 || value < -999) return;
+  bool negative = false;
+  //bool neg_flag = false;
+  uint8_t digits[4];
+  if (value < 0) negative = true;
+  value = fabs(value);
+  digits[0] = (int)value / 1000;
+  uint16_t b = (int)digits[0] * 1000;
+  digits[1] = ((int)value - b) / 100;
+  b += digits[1] * 100;
+  digits[2] = (int)(value - b) / 10;
+  b += digits[2] * 10;
+  digits[3] = value - b;
+  if (!negative) {
+    for (uint8_t i = 0; i < 3; i++) {
+    if (digits[i] == 0) digits[i] = 10;
+    else break;
+    }
+  } else {
+    for (uint8_t i = 0; i < 3; i++) {
+    if (digits[i] == 0) {
+    if (digits[i + 1] == 0){
+    digits[i] = 10;
+    } else {
+    digits[i] = 11;
+    break;
+    }
+    }
+    }
+  }
+  uint8_t DispDataByte[4];
+  for (uint8_t i = 0; i < 4; i++) {
+    DispDataByte[i] = digitHEX[digits[i]];
+  }
+  // scroll(digits, 90000);
+  //twist(digits, 25000);
+  displayByte(DispDataByte);
+}
