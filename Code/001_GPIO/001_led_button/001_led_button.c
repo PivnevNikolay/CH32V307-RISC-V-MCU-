@@ -1,3 +1,11 @@
+/** CH32V307V-EVT-R1
+ * connect the pins of the microcontroller PC.0, PC.1, PC.2, PC.3
+ * with the corresponding pins on the development board Led1, Led2, ELed1, ELed2
+ * connect the output of the microcontroller PA.0
+ * to the output on the debug board KEY
+ *
+ * after pressing the button, all four LEDs flash in turn
+ */
 #include "debug.h"
 /*-----------------------------------------------------------*/
 uint8_t Count = 0;
