@@ -166,25 +166,18 @@ void step4(long step)
 {
   switch (step & 0x3)
   {
-    case 0:    // 1010
-    //PA0=1;PA1=0;PA2=0;PA3=0;//
+    case 0:
     GPIOA->OUTDR = 0x8;
-      break;
-
-    case 1:    // 0110
-    //PA0=0;PA1=1;PA2=0;PA3=0;
+    break;
+    case 1:
     GPIOA->OUTDR = 0x4;
-      break;
-
-    case 2:    //0101
-   //PA0=0;PA1=0;PA2=1;PA3=0;
+    break;
+    case 2:
     GPIOA->OUTDR = 0x2;
-      break;
-
-    case 3:    //1001
-    //PA0=0;PA1=0;PA2=0;PA3=1;
-     GPIOA->OUTDR = 0x1;
-      break;
+    break;
+    case 3:
+    GPIOA->OUTDR = 0x1;
+    break;
   }
 }
 //---------------------------------------------------------------------------//
@@ -230,7 +223,6 @@ bool run()
 }
 
 void micros(){
-  //TIMER_Delay(TIMER0, 1000);
   Delay_Us(1);
   now ++;
 }
