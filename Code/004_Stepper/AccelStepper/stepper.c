@@ -168,16 +168,16 @@ void step4(long step)
   {
     case 0:
     GPIOA->OUTDR = 0x8;
-    break;
+      break;
     case 1:
     GPIOA->OUTDR = 0x4;
-    break;
+      break;
     case 2:
     GPIOA->OUTDR = 0x2;
-    break;
+      break;
     case 3:
-    GPIOA->OUTDR = 0x1;
-    break;
+     GPIOA->OUTDR = 0x1;
+      break;
   }
 }
 //---------------------------------------------------------------------------//
@@ -221,8 +221,15 @@ bool run()
     computeNewSpeed();
   return _speed != 0.0 || distanceToGo() != 0;
 }
-
+//---------------------------------------------------------------------------//
+void runToNewPosition(long position)
+{
+    moveTo(position);
+    while (run());
+}
+//---------------------------------------------------------------------------//
 void micros(){
   Delay_Us(1);
   now ++;
 }
+

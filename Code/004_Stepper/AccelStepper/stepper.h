@@ -29,6 +29,7 @@ void setAcceleration(float acceleration);
 long currentPosition();
 bool run();
 void moveTo(long absolute);
+void runToNewPosition(long position);
 void micros(void);
 
 #endif
