@@ -14,7 +14,9 @@ int main(void)
   printf("SystemClk:%d\r\n", SystemCoreClock);
   printf("GPIO Toggle TEST\r\n");
   Gpio_Port_Clock_Output(GPIOA);
-  Gpio_SetOut_PP(GPIOA, GPIO_Pin_0, Speed_GPIO_2MHz);
+  Gpio_Port_Clock_Output(GPIOC);
+  Gpio_Setmode_Out_PP(GPIOA, GPIO_Pin_0, Speed_GPIO_2MHz);
+  Gpio_Setmode_In(GPIOC, GPIO_Pin_0, Gpio_IN_NoPull);
   GPIO_OutputBit_1();
   GPIO_OutputBit_2();
   GPIO_OutputBit_1();
@@ -22,10 +24,15 @@ int main(void)
 
 while(1)
  {
+  if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_0)!=1){
   GPIO_WriteBit(GPIOA, GPIO_Pin_0, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
-  Delay_Ms(250);
-  //GPIO_WriteBit(GPIOA, GPIO_Pin_0,!GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_0));
-  //Delay_Ms(250);
+  Delay_Ms(50);
+  printf("Button pressed!\r\n");
+  }
+  else{
+  GPIO_WriteBit(GPIOA, GPIO_Pin_0,!GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_0));
+  Delay_Ms(300);
+  }
  }
 }
 

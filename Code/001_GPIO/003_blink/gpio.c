@@ -25,7 +25,30 @@
  * Speed_GPIO_2MHz
  * Speed_GPIO_50MHz
  */
-void Gpio_SetOut_PP(GPIO_TypeDef* GPIOx, u16 Mask, u8 GPIOSpeed)
+
+void Gpio_Setmode_In(GPIO_TypeDef* GPIOx, u16 Mask, u8 PullMode)
+{
+  GPIO_InitTypeDef InitStruct;
+  InitStruct.GPIO_Pin = Mask;
+  InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+
+  switch (PullMode)
+  {
+  case Gpio_IN_NoPull:
+    InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;//вход без подтяжки 
+    break;
+  case Gpio_IN_PullUp:
+    InitStruct.GPIO_Mode = GPIO_Mode_IPU;//вход с подтяжкой к питанию
+    break;
+  case Gpio_IN_PullDown:
+    InitStruct.GPIO_Mode = GPIO_Mode_IPD;//вход с подтяжкой к земле 
+    break;
+  }
+
+  GPIO_Init(GPIOx, &InitStruct);
+}
+
+void Gpio_Setmode_Out_PP(GPIO_TypeDef* GPIOx, u16 Mask, u8 GPIOSpeed)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
   GPIO_InitStructure.GPIO_Pin = Mask;
@@ -41,11 +64,11 @@ void Gpio_SetOut_PP(GPIO_TypeDef* GPIOx, u16 Mask, u8 GPIOSpeed)
       GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     break;
   }
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;//выход с подтяжкой 
   GPIO_Init(GPIOx, &GPIO_InitStructure);
 }
 
-
+//включение тактирования нужного порта
 void Gpio_Port_Clock_Output(GPIO_TypeDef *GPIOx)
 {
   if (GPIOx == GPIOA)
