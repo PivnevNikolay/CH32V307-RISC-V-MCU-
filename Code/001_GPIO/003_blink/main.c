@@ -13,10 +13,10 @@ int main(void)
   USART_Printf_Init(115200);
   printf("SystemClk:%d\r\n", SystemCoreClock);
   printf("GPIO Toggle TEST\r\n");
-  Gpio_Port_Clock_Output(GPIOA);
-  Gpio_Port_Clock_Output(GPIOC);
-  Gpio_Setmode_Out_PP(GPIOA, GPIO_Pin_0, Speed_GPIO_2MHz);
-  Gpio_Setmode_In(GPIOC, GPIO_Pin_0, Gpio_IN_NoPull);
+  Gpio_Port_Clock_Init(GPIOA);
+  Gpio_Port_Clock_Init(GPIOC);
+  Gpio_Setmode_Out(GPIOA, GPIO_Pin_0, Speed_GPIO_2MHz, Gpio_OUT_PP);
+  Gpio_Setmode_In (GPIOC, GPIO_Pin_0, Speed_GPIO_2MHz, Gpio_IN_NoPull);
   GPIO_OutputBit_1();
   GPIO_OutputBit_2();
   GPIO_OutputBit_1();
