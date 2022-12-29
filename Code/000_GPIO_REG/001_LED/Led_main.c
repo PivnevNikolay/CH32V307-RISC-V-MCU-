@@ -40,9 +40,11 @@ int main(void)
 
     while(1)
     {
-        GPIOA->BSHR =(GPIOA->BSHR | (GPIO_BSHR_BR0)|(GPIO_BSHR_BR5));//PA0 и PA5 установим на выходах логическую ноль
+        GPIOA->BSHR =((GPIO_BSHR_BR0)|(GPIO_BSHR_BR5));
+		//PA0 и PA5 установим на выходах логическую ноль (регистр BSHR --> WO(Write only)),считывать его нельзя (|= недопустимо)
         Delay_Ms(750);
-        GPIOA->BSHR =(GPIOA->BSHR | (GPIO_BSHR_BS0)|(GPIO_BSHR_BS5));//PA0 и PA5 установим на выходах логическую еденицу
+        GPIOA->BSHR =((GPIO_BSHR_BS0)|(GPIO_BSHR_BS5));
+		//PA0 и PA5 установим на выходах логическую еденицу (регистр BSHR --> WO(Write only)),считывать его нельзя (|= недопустимо)
         Delay_Ms(750);
 
     }
